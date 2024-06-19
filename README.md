@@ -1,2 +1,3 @@
-# mycoin-wallet
-Bài tập cá nhân môn CCNTPTPM - CQ2020/3
+Homework cá nhân về đề tài blockchain.
+
+To be updated...
