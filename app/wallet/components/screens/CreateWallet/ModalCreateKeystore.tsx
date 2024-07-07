@@ -62,13 +62,13 @@ const ModalCreateKeystore = ({ isOpen, onClose }: iModalCreateKeystore) => {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-4">
-              <div className="text-lg font-semibold">Create Password</div>
+              <div className="text-lg font-semibold">Create Keystore</div>
             </ModalHeader>
             <ModalBody>
               <Input
                 label="Password"
                 variant="bordered"
-                placeholder="Enter your password"
+                placeholder="Input your Keystore file password"
                 value={password}
                 fullWidth
                 onChange={(e) => setPassword(e.target.value)}

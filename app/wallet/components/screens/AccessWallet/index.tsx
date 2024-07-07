@@ -3,6 +3,8 @@ import Title from '@/components/commons/Title'
 import React, { useState } from 'react'
 import ModalAccessKeyStore from './ModalAccessKeyStore'
 import WalletCard from '../../commons/WalletCard'
+import ModalAccessMnemonic from './ModalAccessMnemonic'
+import { Toaster } from 'sonner'
 
 const MODAL_TYPES = {
   MNEMONIC: 'mnemonic',
@@ -26,6 +28,7 @@ const AccessWallet = () => {
 
   return (
     <div>
+      <Toaster richColors />
       <div className="mb-6 space-y-3">
         <Title titleProps={{ color: 'violet' }} headerType="h1">
           Access Wallet
@@ -42,11 +45,25 @@ const AccessWallet = () => {
             subTitle="Access your wallet by using Keystore File"
           />
         </div>
+
+        <div onClick={() => onToggleModal(MODAL_TYPES.MNEMONIC)}>
+          <WalletCard
+            title="MNEMONIC"
+            subTitle="Access your wallet by using Mnemonic Phrase "
+          />
+        </div>
       </div>
       {isShowModal[MODAL_TYPES.KEY_STORE] && (
         <ModalAccessKeyStore
           onClose={() => onToggleModal(MODAL_TYPES.KEY_STORE)}
           isOpen={isShowModal[MODAL_TYPES.KEY_STORE]}
+        />
+      )}
+
+      {isShowModal[MODAL_TYPES.MNEMONIC] && (
+        <ModalAccessMnemonic
+          onClose={() => onToggleModal(MODAL_TYPES.MNEMONIC)}
+          isOpen={isShowModal[MODAL_TYPES.MNEMONIC]}
         />
       )}
     </div>

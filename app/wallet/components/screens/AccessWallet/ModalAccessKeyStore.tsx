@@ -8,7 +8,8 @@ import {
   ModalFooter,
   ModalHeader
 } from '@nextui-org/modal'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { toast } from 'sonner'
 
 import Wallet from 'ethereumjs-wallet'
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@nextui-org/shared-icons'
@@ -22,19 +23,41 @@ interface ModalAccessKeyStore {
 const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
   const [showPw, setShowPw] = useState(false)
 
+  const fileRef = useRef(null)
+
   const [password, setPassword] = useState('')
 
   const [onGenerating, setGenerating] = useState(false)
 
- 
+  const onGetAccount = () => {
+    const [file] = fileRef?.current?.files
+    const reader = new FileReader()
+    if (!file) return
+    reader.addEventListener(
+      'load',
+      async () => {
+        setGenerating(true)
+        try {
+          const result = await Wallet.fromV3(reader.result || '', password)
+          console.log('result:', result.getChecksumAddressString())
+        } catch (error) {
+          const errString = error?.toString()
+          toast.warning(errString)
+        } finally {
+          setGenerating(false)
+        }
+      },
+      false
+    )
+    if (file) {
+      reader.readAsText(file)
+    }
+  }
+
+  const onInputFile = (e: React.ChangeEvent<HTMLInputElement>) => {}
+
   return (
-    <Modal
-      size="xl"
-      hideCloseButton
-     
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal size="xl" hideCloseButton isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         {(onClose) => (
           <>
@@ -47,16 +70,20 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
               </div>
             </ModalHeader>
             <ModalBody>
-              {/* <Input
+              <Input
+                ref={fileRef}
+                onChange={onInputFile}
+                type="file"
+                variant="flat"
+              />
+              <Input
                 label="Password"
                 variant="bordered"
-                placeholder="Enter your password"
+                placeholder="Enter your Keystore password"
                 value={password}
                 fullWidth
                 onChange={(e) => setPassword(e.target.value)}
-                errorMessage={error?.msg}
                 isClearable
-                isInvalid={Boolean(error?.msg)}
                 endContent={
                   <button
                     className="focus:outline-none"
@@ -71,11 +98,17 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
                   </button>
                 }
                 type={showPw ? 'text' : 'password'}
-              /> */}
+              />
             </ModalBody>
             <ModalFooter>
               <Button color="default">Back</Button>
-              <Button color="primary">haha</Button>
+              <Button
+                isLoading={onGenerating}
+                onClick={onGetAccount}
+                color="primary"
+              >
+                Access Wallet
+              </Button>
             </ModalFooter>
           </>
         )}
