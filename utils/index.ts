@@ -16,4 +16,8 @@ const createBlob = (str: any) => {
   })
   return window.URL.createObjectURL(blob)
 }
-export { saveFile, createBlob }
+
+const renderAddress = (addr: string) =>
+  `${addr.slice(0, 4)}...${addr.slice(-4)}`
+
+export { saveFile, createBlob, renderAddress }

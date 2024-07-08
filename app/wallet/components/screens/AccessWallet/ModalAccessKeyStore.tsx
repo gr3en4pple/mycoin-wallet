@@ -70,12 +70,23 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
               </div>
             </ModalHeader>
             <ModalBody>
-              <Input
+              <div className="relative w-full inline-flex tap-highlight-transparent flex-row items-center shadow-sm px-3 gap-3 bg-default-100 data-[hover=true]:bg-default-200 group-data-[focus=true]:bg-default-100 h-10 min-h-10 rounded-medium transition-background motion-reduce:transition-none !duration-150 outline-none group-data-[focus-visible=true]:z-10 group-data-[focus-visible=true]:ring-2 group-data-[focus-visible=true]:ring-focus group-data-[focus-visible=true]:ring-offset-2 group-data-[focus-visible=true]:ring-offset-background">
+                <input
+                  ref={fileRef}
+                  onChange={onInputFile}
+                  className="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 text-small group-data-[has-value=true]:text-default-foreground "
+                  type="file"
+                  placeholder='Your Keystore File'
+                />
+              </div>
+
+              {/* <Input
                 ref={fileRef}
                 onChange={onInputFile}
                 type="file"
                 variant="flat"
-              />
+                className="h-[fit-content]"
+              /> */}
               <Input
                 label="Password"
                 variant="bordered"
@@ -101,7 +112,9 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
               />
             </ModalBody>
             <ModalFooter>
-              <Button color="default">Back</Button>
+              <Button onClick={onClose} color="default">
+                Back
+              </Button>
               <Button
                 isLoading={onGenerating}
                 onClick={onGetAccount}
