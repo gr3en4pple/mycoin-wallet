@@ -18,9 +18,9 @@ import {
   DropdownTrigger
 } from '@nextui-org/dropdown'
 import { mnemonicToAccount } from 'viem/accounts'
-import useAccount from '@/hooks/useAccount'
 
 import { useRouter } from 'next/navigation'
+import useBlockchain from '@/hooks/useBlockchain'
 
 interface ModalAccessMnemonic {
   isOpen: boolean
@@ -28,14 +28,15 @@ interface ModalAccessMnemonic {
 }
 const ModalAccessMnemonic = ({ isOpen, onClose }: ModalAccessMnemonic) => {
   const router = useRouter()
+
+  const setNode = useBlockchain((state) => state.setNode)
+
   const [mnemonicInput, setMnemonicInput] = useState({})
   const [mnemonic, setMnemonic] = useState<null | string>(null)
 
   const [isPasted, setPasted] = useState(false)
 
   const [selectedKeys, setSelectedKeys] = useState(new Set([12]))
-
-  const setAccount = useAccount((state) => state.setAccount)
 
   const selectedValue = useMemo(
     () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
@@ -72,7 +73,8 @@ const ModalAccessMnemonic = ({ isOpen, onClose }: ModalAccessMnemonic) => {
   const onCreateAccount = () => {
     if (isMnenmonicValid) {
       const account = mnemonicToAccount(mnemonic)
-      setAccount(account.address)
+      setNode({ payload: account.address, type: 'createAccount' })
+
       router.push('/wallet/dashboard')
     }
   }

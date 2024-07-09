@@ -1,6 +1,6 @@
 import classNames from '@/utils/classnames'
 import { createElement, PropsWithChildren } from 'react'
-import { title } from '../components/primitives'
+import { title } from '@/components/primitives'
 import { VariantProps } from 'tailwind-variants'
 
 interface Title

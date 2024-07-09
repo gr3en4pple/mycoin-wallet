@@ -28,7 +28,6 @@ const AccessWallet = () => {
 
   return (
     <div>
-      <Toaster richColors />
       <div className="mb-6 space-y-3">
         <Title titleProps={{ color: 'violet' }} headerType="h1">
           Access Wallet

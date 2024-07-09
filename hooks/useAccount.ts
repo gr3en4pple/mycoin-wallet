@@ -1,22 +1,26 @@
 import { Address } from 'viem'
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-interface Account {
-  account: null | Address
-  setAccount: (account: null | Address) => void
-}
+import useBlockchain from './useBlockchain'
+import { NULL_ADDRESS } from '@/config'
+import { useMemo } from 'react'
 
-const useAccount = create<Account>()(
-  persist(
-    (set, get) => ({
-      account: null,
-      setAccount: (account) => set({ account })
-    }),
-    {
-      name: 'account-storage', // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => localStorage) // (
-    }
+const useAccount = () => {
+  const account = useBlockchain((state) => state.account)
+  const blockchain = useBlockchain((state) => state.blockchain)
+  const blockCreatedCount = useBlockchain((state) => state.blockCreatedCount)
+
+  const accountBalance = useMemo(
+    () => account && blockchain?.getBalanceOfAddress([account[0], account[1]]),
+    [account, blockchain, blockCreatedCount]
   )
-)
+
+  if (!account) {
+    return { address: NULL_ADDRESS, balance: 0 }
+  }
+
+  return {
+    address: account[0] as Address,
+    balance: accountBalance
+  }
+}
 
 export default useAccount
