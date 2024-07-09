@@ -37,14 +37,14 @@ const CreateWallet = () => {
       <div className="space-y-4">
         <div onClick={() => onToggleModal(MODAL_TYPES.KEY_STORE)}>
           <WalletCard
-            title="Key Store"
-            subTitle="Create wallet by using Keystore V3 Mechanism"
+            titleContent="Key Store"
+            subTitleContent="Create wallet by using Keystore V3 Mechanism"
           />
         </div>
         <div onClick={() => onToggleModal(MODAL_TYPES.MNEMONIC)}>
           <WalletCard
-            title="Mnemonic Phrase"
-            subTitle="Create wallet by generate random 12 or 24 english words"
+            titleContent="Mnemonic Phrase"
+            subTitleContent="Create wallet by generate random 12 or 24 english words"
           />
         </div>
       </div>

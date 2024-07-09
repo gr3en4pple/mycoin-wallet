@@ -42,7 +42,7 @@ const ModalCreateMnemonic = ({ isOpen, onClose }: iModalCreateMnemonic) => {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-4">
-              <div>Write down these words </div>
+              <div className="text-2xl">Write down these words </div>
               <div className="flex items-center justify-between">
                 <Snippet
                   hideSymbol
@@ -75,7 +75,9 @@ const ModalCreateMnemonic = ({ isOpen, onClose }: iModalCreateMnemonic) => {
                       disallowEmptySelection
                       selectionMode="single"
                       selectedKeys={selectedKeys}
-                      onSelectionChange={setSelectedKeys}
+                      onSelectionChange={(keys) =>
+                        setSelectedKeys(keys as Set<number>)
+                      }
                     >
                       <DropdownItem key={12}>12 Words</DropdownItem>
                       <DropdownItem key={24}>24 Words</DropdownItem>

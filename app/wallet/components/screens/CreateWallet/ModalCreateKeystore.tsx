@@ -62,7 +62,7 @@ const ModalCreateKeystore = ({ isOpen, onClose }: iModalCreateKeystore) => {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-4">
-              <div className="text-lg font-semibold">Create Keystore</div>
+              <div className="text-2xl font-semibold">Create Keystore</div>
             </ModalHeader>
             <ModalBody>
               <Input

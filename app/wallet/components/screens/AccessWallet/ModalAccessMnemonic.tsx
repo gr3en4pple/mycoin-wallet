@@ -117,7 +117,9 @@ const ModalAccessMnemonic = ({ isOpen, onClose }: ModalAccessMnemonic) => {
                     disallowEmptySelection
                     selectionMode="single"
                     selectedKeys={selectedKeys}
-                    onSelectionChange={setSelectedKeys}
+                    onSelectionChange={(keys) =>
+                      setSelectedKeys(keys as Set<number>)
+                    }
                   >
                     <DropdownItem key={12}>12 Words</DropdownItem>
                     <DropdownItem key={24}>24 Words</DropdownItem>
@@ -148,7 +150,9 @@ const ModalAccessMnemonic = ({ isOpen, onClose }: ModalAccessMnemonic) => {
                       }
                       setMnemonicInput((prev) => ({ ...prev, [key]: value }))
                     }}
-                    value={mnemonicInput?.[key as number] ?? ''}
+                    value={
+                      mnemonicInput?.[key as keyof typeof mnemonicInput] ?? ''
+                    }
                   />
                 ))}
               </div>

@@ -16,6 +16,10 @@ export const siteConfig = {
     {
       label: 'Access Wallet',
       href: '/wallet/access'
+    },
+    {
+      label: 'Block Explorer',
+      href: '/block-explorer'
     }
   ],
   navMenuItems: [

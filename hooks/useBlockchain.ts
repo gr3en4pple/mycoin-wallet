@@ -19,8 +19,8 @@ interface IBlockChain {
 }
 
 const defaultNodes: Nodes = [
-  ['0x0000000000000000000000000000000000000000', 1000],
-  ['0x1111111111111111111111111111111111111111', 1000]
+  ['0x1111111111111111111111111111111111111111', 1000],
+  ['0x2222222222222222222222222222222222222222', 1000]
 ]
 
 const useBlockchain = create<IBlockChain>()(
@@ -33,7 +33,10 @@ const useBlockchain = create<IBlockChain>()(
     setNode: ({ payload, type }) =>
       set((state) => {
         if (type === 'createAccount') {
-          const isExistNode = state.nodes.find((node) => node[0] === payload)
+          const isExistNode = state.nodes.find(
+            (node) =>
+              (node[0] as string)?.toLowerCase() === payload?.toLowerCase()
+          )
           if (!isExistNode) {
             const newNode = [payload, 1000] as Node
             state.account = newNode
@@ -42,7 +45,9 @@ const useBlockchain = create<IBlockChain>()(
         }
         if (type === 'updateBalance') {
           const index = state.nodes.findIndex(
-            (node) => node[0] === payload?.address
+            (node) =>
+              (node[0] as string)?.toLowerCase() ===
+              payload?.address?.toLowerCase()
           )
           if (index === -1) return
           state.nodes[index][1] = payload?.newBalance

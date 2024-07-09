@@ -5,7 +5,7 @@ import React from 'react'
 
 interface IBlockchainProvider extends React.PropsWithChildren {}
 
-const BlockchainProvider: React.FC<IBlockchainProvider> = ({ children }) => {
+const BlockchainProvider = ({ children }: IBlockchainProvider) => {
   const { blockchain, algorithm, inCreaseBlock, nodes, setNode } =
     useBlockchain()
   React.useEffect(() => {
@@ -24,7 +24,7 @@ const BlockchainProvider: React.FC<IBlockchainProvider> = ({ children }) => {
     return () => interval && clearInterval(interval)
   }, [blockchain, algorithm])
 
-  return children
+  return <>{children}</>
 }
 
 export default BlockchainProvider

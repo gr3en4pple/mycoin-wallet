@@ -4,20 +4,23 @@ import React, { useState } from 'react'
 import ModalAccessKeyStore from './ModalAccessKeyStore'
 import WalletCard from '../../commons/WalletCard'
 import ModalAccessMnemonic from './ModalAccessMnemonic'
-import { Toaster } from 'sonner'
+import ModalAccessPrivateKey from './ModalAccessPrivateKey'
 
 const MODAL_TYPES = {
   MNEMONIC: 'mnemonic',
-  KEY_STORE: 'keyStore'
+  KEY_STORE: 'keyStore',
+  PRIVATE_KEY: 'privateKey'
 } as const
 
 const AccessWallet = () => {
   const [isShowModal, setShowModal] = useState<{
     [MODAL_TYPES.MNEMONIC]: boolean
     [MODAL_TYPES.KEY_STORE]: boolean
+    [MODAL_TYPES.PRIVATE_KEY]: boolean
   }>({
     mnemonic: false,
-    keyStore: false
+    keyStore: false,
+    privateKey: false
   })
 
   const onToggleModal = (
@@ -40,15 +43,22 @@ const AccessWallet = () => {
       <div className="space-y-4">
         <div onClick={() => onToggleModal(MODAL_TYPES.KEY_STORE)}>
           <WalletCard
-            title="Key Store"
-            subTitle="Access your wallet by using Keystore File"
+            titleContent="Key Store"
+            subTitleContent="Access your wallet by using Keystore File"
           />
         </div>
 
         <div onClick={() => onToggleModal(MODAL_TYPES.MNEMONIC)}>
           <WalletCard
-            title="MNEMONIC"
-            subTitle="Access your wallet by using Mnemonic Phrase "
+            titleContent="MNEMONIC"
+            subTitleContent="Access your wallet by using Mnemonic Phrase "
+          />
+        </div>
+
+        <div onClick={() => onToggleModal(MODAL_TYPES.PRIVATE_KEY)}>
+          <WalletCard
+            titleContent="Private key"
+            subTitleContent="Access your wallet by using Private key"
           />
         </div>
       </div>
@@ -63,6 +73,13 @@ const AccessWallet = () => {
         <ModalAccessMnemonic
           onClose={() => onToggleModal(MODAL_TYPES.MNEMONIC)}
           isOpen={isShowModal[MODAL_TYPES.MNEMONIC]}
+        />
+      )}
+
+      {isShowModal[MODAL_TYPES.PRIVATE_KEY] && (
+        <ModalAccessPrivateKey
+          onClose={() => onToggleModal(MODAL_TYPES.PRIVATE_KEY)}
+          isOpen={isShowModal[MODAL_TYPES.PRIVATE_KEY]}
         />
       )}
     </div>

@@ -6,8 +6,18 @@ import { Card, CardBody, CardHeader } from '@nextui-org/card'
 import Title from '@/components/commons/Title'
 import useAccount from '@/hooks/useAccount'
 import { Input } from '@nextui-org/input'
-import { sleep } from '@/utils'
-
+import { renderAddress, renderTxHash, sleep } from '@/utils'
+import {
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell
+} from '@nextui-org/table'
+import Transaction from '@/blockchain/Transaction'
+import { CheckIcon } from '@nextui-org/shared-icons'
+import { Address } from 'viem'
 const Stake = () => {
   const account = useAccount()
 
@@ -16,6 +26,7 @@ const Stake = () => {
 
   const algorithm = useBlockchain((state) => state.algorithm)
   const setNode = useBlockchain((state) => state.setNode)
+  const nodes = useBlockchain((state) => state.nodes)
 
   const onStake = async () => {
     if (!+amount) return
@@ -71,43 +82,44 @@ const Stake = () => {
           Stake
         </Button>
 
-        {/* <Table className="mt-8">
+        <Table className="mt-8">
           <TableHeader>
             <TableColumn>Address</TableColumn>
             <TableColumn>Staked</TableColumn>
-            <TableColumn>Current Balance</TableColumn>
           </TableHeader>
           <TableBody>
-            {blockchain
-              ? blockchain?.chain?.map((block) => {
-                  const transaction = block.transactions
+            {nodes ? (
+              nodes?.map((node) => {
+                const address = node[0] as Address
+                const isMaxStaker =
+                  algorithm?.getValidatorWithMaxStake()[0] === node[0]
+                return (
+                  <TableRow key={address}>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <span>{renderAddress(address)}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <span>{algorithm?.getStakedAmount(address)}</span>
 
-                  return (
-                    <TableRow key={block.hash}>
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <span>{renderTxHash(block.hash)}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>"haha</TableCell>
-                      <TableCell>
-                        {transaction === 'GenesisBlock'
-                          ? ''
-                          : transaction.map((tx: Transaction) => (
-                              <div>
-                                From: {renderAddress(tx?.fromAddress || '')}{' '}
-                                {'\n'}
-                                To: {renderAddress(tx?.toAddress || '')} {'\n'}
-                                Amount: {tx?.amount} {'\n'}
-                              </div>
-                            ))}
-                      </TableCell>
-                    </TableRow>
-                  )
-                })
-              : null}
+                        {isMaxStaker ? (
+                          <div className=" flex items-center space-x-2">
+                            <span>Validator</span>
+                            <CheckIcon color="teal" />
+                          </div>
+                        ) : null}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            ) : (
+              <></>
+            )}
           </TableBody>
-        </Table> */}
+        </Table>
       </CardBody>
     </Card>
   )

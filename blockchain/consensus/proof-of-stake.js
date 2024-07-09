@@ -52,6 +52,7 @@ class ProofOfStake {
     const validatorIndex = this.validators.findIndex(
       ([address]) => address === node
     )
+    if(validatorIndex === -1) return 0
     return this.validators[validatorIndex][1]
   }
 
@@ -76,7 +77,6 @@ class ProofOfStake {
 
   generateBlock() {
     this.block.hash = this.calculateHash()
-    console.log('Block created by:' + this.block.validator)
     return this.block
   }
 }

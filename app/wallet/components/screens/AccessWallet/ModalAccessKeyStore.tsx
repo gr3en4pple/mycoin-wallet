@@ -13,6 +13,7 @@ import { toast } from 'sonner'
 
 import Wallet from 'ethereumjs-wallet'
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@nextui-org/shared-icons'
+import useBlockchain from '@/hooks/useBlockchain'
 
 export const keyStoreOption = { kdf: 'scrypt', n: 131072 }
 
@@ -23,14 +24,17 @@ interface ModalAccessKeyStore {
 const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
   const [showPw, setShowPw] = useState(false)
 
-  const fileRef = useRef(null)
+  const fileRef = useRef<HTMLInputElement | null>(null)
 
+  const setNode = useBlockchain((state) => state.setNode)
   const [password, setPassword] = useState('')
 
   const [onGenerating, setGenerating] = useState(false)
 
   const onGetAccount = () => {
-    const [file] = fileRef?.current?.files
+    if (!fileRef) return
+    const file = fileRef?.current?.files?.[0]
+
     const reader = new FileReader()
     if (!file) return
     reader.addEventListener(
@@ -38,8 +42,11 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
       async () => {
         setGenerating(true)
         try {
-          const result = await Wallet.fromV3(reader.result || '', password)
-          console.log('result:', result.getChecksumAddressString())
+          const result = await Wallet.fromV3(reader.result as string, password)
+          setNode({
+            payload: result.getChecksumAddressString(),
+            type: 'createAccount'
+          })
         } catch (error) {
           const errString = error?.toString()
           toast.warning(errString)
@@ -76,17 +83,10 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
                   onChange={onInputFile}
                   className="w-full font-normal bg-transparent !outline-none placeholder:text-foreground-500 focus-visible:outline-none data-[has-start-content=true]:ps-1.5 data-[has-end-content=true]:pe-1.5 text-small group-data-[has-value=true]:text-default-foreground "
                   type="file"
-                  placeholder='Your Keystore File'
+                  placeholder="Your Keystore File"
                 />
               </div>
 
-              {/* <Input
-                ref={fileRef}
-                onChange={onInputFile}
-                type="file"
-                variant="flat"
-                className="h-[fit-content]"
-              /> */}
               <Input
                 label="Password"
                 variant="bordered"

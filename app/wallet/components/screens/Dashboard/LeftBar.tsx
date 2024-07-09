@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import WalletCard from './WalletCard'
+import BiographyCard from './BiographyCard'
 import { Card, CardBody, CardHeader } from '@nextui-org/card'
 import {
   SendFilledIcon,
@@ -28,7 +28,7 @@ const LeftBar = () => {
     <div className="h-full">
       <Card className="h-full">
         <CardHeader>
-          <WalletCard
+          <BiographyCard
             account={account.address || `0x${'0'.repeat(40)}`}
             balance={account.balance}
           />

@@ -6,12 +6,12 @@ import { Address } from 'viem'
 import { CheckLinearIcon, CopyLinearIcon } from '@nextui-org/shared-icons'
 import copy from 'copy-to-clipboard'
 
-interface IWalletCard {
+interface IBiographyCard {
   account: Address
   balance: number
 }
 
-const WalletCard = ({ account, balance }: IWalletCard) => {
+const BiographyCard = ({ account, balance }: IBiographyCard) => {
   const [isCopied, setCopied] = useState(false)
 
   const onCopy = () => {
@@ -44,4 +44,4 @@ const WalletCard = ({ account, balance }: IWalletCard) => {
   )
 }
 
-export default WalletCard
+export default BiographyCard

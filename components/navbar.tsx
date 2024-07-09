@@ -21,32 +21,39 @@ import { usePathname } from 'next/navigation'
 import { toast, Toaster } from 'sonner'
 import { useEffect } from 'react'
 import useBlockchain from '@/hooks/useBlockchain'
+import { renderAddress, renderTxHash } from '@/utils'
 export const Navbar = () => {
   const pathname = usePathname()
 
-  const { blockchain, blockCreatedCount } = useBlockchain((state) => ({
-    blockchain: state.blockchain,
-    blockCreatedCount: state.blockCreatedCount
-  }))
+  const { blockchain, blockCreatedCount, algorithm } = useBlockchain(
+    (state) => ({
+      blockchain: state.blockchain,
+      blockCreatedCount: state.blockCreatedCount,
+      algorithm: state.algorithm
+    })
+  )
 
   useEffect(() => {
-    if (blockchain && blockCreatedCount > 0) {
+    if (blockchain && blockCreatedCount > 0 && algorithm) {
       const blockHash = blockchain.getLatestBlock().hash
-
+      const validator = algorithm.getValidatorWithMaxStake()[0]
       toast(
-        `Block has created.
-          Block hash: ${blockHash.slice(0, 8)}...${blockHash.slice(-8)}`,
+        <div>
+          <div>Block has created.</div>
+          <div>Block hash: {renderTxHash(blockHash)}</div>
+          <div>Validator: {renderAddress(validator + '')}</div>
+        </div>,
         {
           duration: 2000,
           position: 'bottom-right'
         }
       )
     }
-  }, [blockCreatedCount, blockchain])
+  }, [blockCreatedCount, blockchain, algorithm])
 
   return (
     <>
-      <Toaster  />
+      <Toaster />
       <NextUINavbar maxWidth="xl" position="sticky">
         <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
           <NavbarBrand as="li" className="gap-3 max-w-fit">
