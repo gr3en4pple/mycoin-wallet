@@ -1,5 +1,7 @@
 # Bài tập cá nhân môn CCNTPTPM - CQ2020/3
 
+Final url: [vercel link](https://mycoin-wallet-4icy3yu44-gr3en4pples-projects.vercel.app/)
+
 ## Cài đặt
 
 Sử dụng node v18 trở lên
@@ -59,3 +61,5 @@ Validator sẽ được tặng 1 số tiền khi validate thành công block đ�
 
 Mỗi giao dịch transfer, reward cho validator sẽ được push vào array Transactions của mỗi Block.
 Và sẽ được tính là thành công khi Block đó được tạo.
+
+
