@@ -8,17 +8,11 @@ import {
   ModalFooter,
   ModalHeader
 } from '@nextui-org/modal'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { toast } from 'sonner'
+import React, { useState } from 'react'
 
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@nextui-org/shared-icons'
 import useBlockchain from '@/hooks/useBlockchain'
-import {
-  Address,
-  privateKeyToAccount,
-  privateKeyToAddress
-} from 'viem/accounts'
-import { Hex, isAddress, isHex } from 'viem'
+import { privateKeyToAddress } from 'viem/accounts'
 import { useRouter } from 'next/navigation'
 import { sleep } from '@/utils'
 
@@ -39,8 +33,12 @@ const ModalAccessPrivateKey = ({ isOpen, onClose }: ModalAccessPrivateKey) => {
     setGenerating(true)
     try {
       await sleep(300)
-      const account = privateKeyToAddress(`0x${password}`)
-      setNode({ payload: account, type: 'createAccount' })
+      const account = privateKeyToAddress(
+        password.indexOf('0x') === 0
+          ? (password as `0x${string}`)
+          : `0x${password}`
+      )
+      setNode({ payload: account, type: 'accessWallet' })
       router.push('/wallet/dashboard')
     } catch (error) {
       console.log('error:', error)

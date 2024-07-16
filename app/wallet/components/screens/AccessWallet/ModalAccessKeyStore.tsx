@@ -45,7 +45,7 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
           const result = await Wallet.fromV3(reader.result as string, password)
           setNode({
             payload: result.getChecksumAddressString(),
-            type: 'createAccount'
+            type: 'accessWallet'
           })
         } catch (error) {
           const errString = error?.toString()

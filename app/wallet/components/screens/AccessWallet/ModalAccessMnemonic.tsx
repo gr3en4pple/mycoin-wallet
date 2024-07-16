@@ -73,7 +73,7 @@ const ModalAccessMnemonic = ({ isOpen, onClose }: ModalAccessMnemonic) => {
   const onCreateAccount = () => {
     if (isMnenmonicValid) {
       const account = mnemonicToAccount(mnemonic)
-      setNode({ payload: account.address, type: 'createAccount' })
+      setNode({ payload: account.address, type: 'accessWallet' })
 
       router.push('/wallet/dashboard')
     }

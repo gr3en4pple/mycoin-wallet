@@ -73,6 +73,7 @@ const BlockExplorer: React.FC<IBlockExplorer> = ({ address }) => {
               <TableColumn>Method</TableColumn>
               <TableColumn>From</TableColumn>
               <TableColumn>To</TableColumn>
+              <TableColumn>Date</TableColumn>
               <TableColumn>Amount</TableColumn>
             </TableHeader>
             <TableBody>
@@ -117,6 +118,12 @@ const BlockExplorer: React.FC<IBlockExplorer> = ({ address }) => {
                           >
                             {renderAddress(tx.toAddress ?? NULL_ADDRESS)}
                           </Snippet>
+                        </div>
+                      </TableCell>
+
+                      <TableCell>
+                        <div className="flex items-center space-x-3 font-semibold">
+                          <span>{new Date(tx.date || 0).toLocaleString()}</span>
                         </div>
                       </TableCell>
                       <TableCell>

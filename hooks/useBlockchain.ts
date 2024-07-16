@@ -6,7 +6,7 @@ import { immer } from 'zustand/middleware/immer'
 
 export type Node = (number | Address)[]
 export type Nodes = Node[]
-export type SetNodeAction = 'createAccount' | 'updateBalance' | 'updateAll'
+export type SetNodeAction = 'accessWallet' | 'updateBalance' | 'updateAll'
 
 interface IBlockChain {
   blockchain: null | Blockchain
@@ -32,7 +32,7 @@ const useBlockchain = create<IBlockChain>()(
     account: null,
     setNode: ({ payload, type }) =>
       set((state) => {
-        if (type === 'createAccount') {
+        if (type === 'accessWallet') {
           const isExistNode = state.nodes.find(
             (node) =>
               (node[0] as string)?.toLowerCase() === payload?.toLowerCase()
@@ -41,6 +41,8 @@ const useBlockchain = create<IBlockChain>()(
             const newNode = [payload, 1000] as Node
             state.account = newNode
             state.nodes.push(newNode)
+          } else {
+            state.account = isExistNode
           }
         }
         if (type === 'updateBalance') {
