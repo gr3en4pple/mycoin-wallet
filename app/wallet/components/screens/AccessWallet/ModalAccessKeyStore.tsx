@@ -10,6 +10,7 @@ import {
 } from '@nextui-org/modal'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 import Wallet from 'ethereumjs-wallet'
 import { EyeSlashFilledIcon, EyeFilledIcon } from '@nextui-org/shared-icons'
@@ -22,6 +23,7 @@ interface ModalAccessKeyStore {
   onClose: () => void
 }
 const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
+  const router = useRouter()
   const [showPw, setShowPw] = useState(false)
 
   const fileRef = useRef<HTMLInputElement | null>(null)
@@ -47,6 +49,7 @@ const ModalAccessKeyStore = ({ isOpen, onClose }: ModalAccessKeyStore) => {
             payload: result.getChecksumAddressString(),
             type: 'accessWallet'
           })
+          router.push('/wallet/dashboard')
         } catch (error) {
           const errString = error?.toString()
           toast.warning(errString)

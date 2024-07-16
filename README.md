@@ -1,6 +1,6 @@
 # Bài tập cá nhân môn CCNTPTPM - CQ2020/3
 
-Final url: [vercel link](https://mycoin-wallet-4icy3yu44-gr3en4pples-projects.vercel.app/)
+Final url: [vercel link](https://mycoin-wallet.vercel.app/)
 
 ## Cài đặt
 
