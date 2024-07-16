@@ -102,7 +102,7 @@ const SendCard = () => {
         </div>
 
         <Button
-          isDisabled={isInvalid}
+          isDisabled={isInvalid || !Boolean(receiver)}
           isLoading={loading}
           onClick={onSend}
           color="secondary"

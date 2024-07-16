@@ -1,10 +1,10 @@
 'use client'
 import useBlockchain, { Node } from '@/hooks/useBlockchain'
 import { Button } from '@nextui-org/button'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Card, CardBody, CardHeader } from '@nextui-org/card'
 import Title from '@/components/commons/Title'
-import useAccount from '@/hooks/useAccount'
+import useAccount, { useGetAccountTransactions } from '@/hooks/useAccount'
 import { Input } from '@nextui-org/input'
 import { renderAddress, renderTxHash, sleep } from '@/utils'
 import {
@@ -36,23 +36,24 @@ const Stake = () => {
     await sleep(300)
     setLoading(false)
 
-    const stakeResponse: Node =
-      algorithm?.stake([account.address, account.balance], +amount) || []
+    algorithm?.stake([account.address, account.balance], +amount)
 
     blockchain?.createTransaction(
       new Transaction(account.address, NULL_ADDRESS, 'stake', +amount)
     )
 
-    // setNode({
-    //   payload: {
-    //     address: account.address,
-    //     newBalance: stakeResponse?.[1]
-    //   },
-    //   type: 'updateBalance'
-    // })
-
     setAmount('')
   }
+
+  const accountTx = useGetAccountTransactions(account.address)
+
+  const accountStakeAmount = useMemo(
+    () =>
+      accountTx
+        .filter((tx) => tx.functionType === 'stake')
+        .reduce((total, tx) => (total += tx.amount), 0),
+    [accountTx]
+  )
 
   return (
     <Card className="flex-grow p-6">
@@ -118,7 +119,7 @@ const Stake = () => {
                       <div className="flex items-center space-x-3">
                         <span>
                           {isThisAccount
-                            ? account.balance
+                            ? accountStakeAmount
                             : algorithm?.getStakedAmount(address)}
                         </span>
 

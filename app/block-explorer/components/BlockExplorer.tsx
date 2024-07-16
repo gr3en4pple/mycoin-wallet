@@ -18,6 +18,7 @@ import { renderAddress, renderTxHash } from '@/utils'
 import Transaction from '@/blockchain/Transaction'
 import { NULL_ADDRESS } from '@/config'
 import { Snippet } from '@nextui-org/snippet'
+import { useGetAccountTransactions } from '@/hooks/useAccount'
 
 interface IBlockExplorer {
   address: string
@@ -53,12 +54,7 @@ const BlockExplorer: React.FC<IBlockExplorer> = ({ address }) => {
     [node, blockchain, blockCreatedCount]
   )
 
-  const transactions = useMemo(() => {
-    return blockchain?.chain
-      ?.slice(1)
-      ?.map((block) => block.transactions)
-      .flat()
-  }, [blockchain?.chain, blockCreatedCount, address])
+  const transactions = useGetAccountTransactions(address as Address)
 
   return (
     <div>
@@ -78,61 +74,54 @@ const BlockExplorer: React.FC<IBlockExplorer> = ({ address }) => {
             </TableHeader>
             <TableBody>
               {transactions?.length ? (
-                transactions
-                  ?.filter(
-                    (tx: Transaction) =>
-                      (tx?.fromAddress &&
-                        tx?.fromAddress?.toLowerCase() ===
-                          address?.toLowerCase()) ||
-                      (tx?.toAddress &&
-                        tx?.toAddress?.toLowerCase() === address?.toLowerCase())
-                  )
-                  .map((tx: Transaction, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <span>{tx.functionType}</span>
-                        </div>
-                      </TableCell>
+                transactions.map((tx: Transaction, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <span>{tx.functionType}</span>
+                      </div>
+                    </TableCell>
 
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <Snippet
-                            hideSymbol
-                            codeString={tx.fromAddress ?? NULL_ADDRESS}
-                            variant="shadow"
-                            color="default"
-                          >
-                            {renderAddress(tx.fromAddress ?? NULL_ADDRESS)}
-                          </Snippet>
-                          <span></span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-3">
-                          <Snippet
-                            hideSymbol
-                            codeString={tx.toAddress ?? NULL_ADDRESS}
-                            variant="shadow"
-                            color="default"
-                          >
-                            {renderAddress(tx.toAddress ?? NULL_ADDRESS)}
-                          </Snippet>
-                        </div>
-                      </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <Snippet
+                          hideSymbol
+                          codeString={tx.fromAddress ?? NULL_ADDRESS}
+                          variant="shadow"
+                          color="default"
+                        >
+                          {renderAddress(tx.fromAddress ?? NULL_ADDRESS)}
+                        </Snippet>
+                        <span></span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-3">
+                        <Snippet
+                          hideSymbol
+                          codeString={tx.toAddress ?? NULL_ADDRESS}
+                          variant="shadow"
+                          color="default"
+                        >
+                          {renderAddress(tx.toAddress ?? NULL_ADDRESS)}
+                        </Snippet>
+                      </div>
+                    </TableCell>
 
-                      <TableCell>
-                        <div className="flex items-center space-x-3 font-semibold">
-                          <span>{new Date(tx.timestamp || 0).toLocaleString()}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-3 font-semibold">
-                          <span>{tx.amount}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                    <TableCell>
+                      <div className="flex items-center space-x-3 font-semibold">
+                        <span>
+                          {new Date(tx.timestamp || 0).toLocaleString()}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-3 font-semibold">
+                        <span>{tx.amount}</span>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
               ) : (
                 <></>
               )}
