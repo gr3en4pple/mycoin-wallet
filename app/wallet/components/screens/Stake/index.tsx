@@ -18,6 +18,7 @@ import {
 import Transaction from '@/blockchain/Transaction'
 import { CheckIcon } from '@nextui-org/shared-icons'
 import { Address } from 'viem'
+import { NULL_ADDRESS } from '@/config'
 const Stake = () => {
   const account = useAccount()
 
@@ -27,6 +28,7 @@ const Stake = () => {
   const algorithm = useBlockchain((state) => state.algorithm)
   const setNode = useBlockchain((state) => state.setNode)
   const nodes = useBlockchain((state) => state.nodes)
+  const blockchain = useBlockchain((state) => state.blockchain)
 
   const onStake = async () => {
     if (!+amount) return
@@ -36,13 +38,18 @@ const Stake = () => {
 
     const stakeResponse: Node =
       algorithm?.stake([account.address, account.balance], +amount) || []
-    setNode({
-      payload: {
-        address: account.address,
-        newBalance: stakeResponse?.[1]
-      },
-      type: 'updateBalance'
-    })
+
+    blockchain?.createTransaction(
+      new Transaction(account.address, NULL_ADDRESS, 'stake', +amount)
+    )
+
+    // setNode({
+    //   payload: {
+    //     address: account.address,
+    //     newBalance: stakeResponse?.[1]
+    //   },
+    //   type: 'updateBalance'
+    // })
 
     setAmount('')
   }
@@ -91,6 +98,8 @@ const Stake = () => {
             {nodes ? (
               nodes?.map((node) => {
                 const address = node[0] as Address
+                const isThisAccount =
+                  address.toLowerCase() === account.address.toLowerCase()
                 const isMaxStaker =
                   algorithm?.getValidatorWithMaxStake()[0] === node[0]
                 return (
@@ -102,7 +111,11 @@ const Stake = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center space-x-3">
-                        <span>{algorithm?.getStakedAmount(address)}</span>
+                        <span>
+                          {isThisAccount
+                            ? account.balance
+                            : algorithm?.getStakedAmount(address)}
+                        </span>
 
                         {isMaxStaker ? (
                           <div className=" flex items-center space-x-2">
