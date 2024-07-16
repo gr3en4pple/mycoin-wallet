@@ -123,7 +123,7 @@ const BlockExplorer: React.FC<IBlockExplorer> = ({ address }) => {
 
                       <TableCell>
                         <div className="flex items-center space-x-3 font-semibold">
-                          <span>{new Date(tx.date || 0).toLocaleString()}</span>
+                          <span>{new Date(tx.timestamp || 0).toLocaleString()}</span>
                         </div>
                       </TableCell>
                       <TableCell>

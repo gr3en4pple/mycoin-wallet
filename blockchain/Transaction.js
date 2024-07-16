@@ -4,7 +4,7 @@ class Transaction {
     this.toAddress = toAddress
     this.amount = amount
     this.functionType = functionType
-    this.date = new Date().getTime()
+    this.timestamp = new Date().getTime()
   }
 }
 

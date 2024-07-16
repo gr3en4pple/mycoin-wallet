@@ -4,11 +4,10 @@ const Transaction = require('./Transaction.js')
 const ProofOfStake = require('./consensus/proof-of-stake.js')
 
 class Blockchain {
-  constructor() {
+  constructor(_miningReward) {
     this.chain = [this.createGenesisBlock()]
     this.pendingTransactions = []
-    this.participants = []
-    this.miningReward = 100
+    this.miningReward = _miningReward ?? 100
   }
 
   createGenesisBlock() {
@@ -39,10 +38,6 @@ class Blockchain {
 
   createTransaction(transaction) {
     this.pendingTransactions.push(transaction)
-  }
-
-  registerParticipant(account) {
-    this.participants.push(account)
   }
 
   getBalanceOfAddress(node) {
