@@ -85,7 +85,12 @@ const Stake = () => {
           />
         </div>
 
-        <Button onClick={onStake} isLoading={loading} color="secondary">
+        <Button
+          disabled={+amount > +account.balance}
+          onClick={onStake}
+          isLoading={loading}
+          color="secondary"
+        >
           Stake
         </Button>
 

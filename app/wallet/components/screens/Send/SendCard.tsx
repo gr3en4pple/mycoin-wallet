@@ -51,8 +51,11 @@ const SendCard = () => {
   }, [isReceiverEqualAccount, receiver])
 
   const isInvalid = useMemo(() => {
-    return Boolean(receiver) && (isReceiverEqualAccount || !isAddress(receiver))
-  }, [isReceiverEqualAccount, receiver])
+    return (
+      (Boolean(receiver) && (isReceiverEqualAccount || !isAddress(receiver))) ||
+      +amount > +account.balance
+    )
+  }, [isReceiverEqualAccount, receiver, amount, account.balance])
 
   return (
     <Card className="flex-grow p-6">
